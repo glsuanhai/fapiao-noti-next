@@ -6,9 +6,11 @@
 
 能实现两边同时部署的方法是通过GitHub Actions工作流。当代码推送到GitHub或手动触发工作流时，系统会自动构建静态网站并部署到阿里云服务器。这样，国内用户可以通过tianfei.chat快速访问网站，避开了国外服务器访问慢的问题
 
-
-
-
+# fapiao-noti-next项目说明
+本项目是基于NotionNext的fork版本，目前部署在GitHub上，用户名glsuanhai，项目名：fapiao-noti-next
+该项目目前部署在Vercel上，部署信息如下：
+- Deployment: fapiao-noti-next-ghwmqhgvw-glsuanhais-projects.vercel.app
+- Domains: fapiao-noti-next.vercel.app
 
 # NotionNext 自定义修改说明文档
 
