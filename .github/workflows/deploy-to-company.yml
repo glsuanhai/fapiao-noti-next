@@ -51,7 +51,17 @@ jobs:
           git init
           git remote add origin git@codeup.aliyun.com:61b7412cfa282c88e103944f/Web/official-web.git
           
-          # 创建 blog 目录并复制文件
+          # 拉取 master 分支现有内容
+          git fetch origin master
+          git checkout -b master origin/master
+          
+          # 备份现有的 blog 目录，添加时间戳
+          if [ -d "blog" ]; then
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+            mv blog blog_backup_$TIMESTAMP
+          fi
+          
+          # 新建 blog 目录并复制新文件
           mkdir -p blog
           cp -r $GITHUB_WORKSPACE/vercel-static/fapiao-noti-next.vercel.app/* blog/
           
@@ -59,5 +69,5 @@ jobs:
           git add .
           git commit -m "Auto-deploy from Vercel - $(date)" || echo "No changes to commit"
           
-          # 推送到 blog 分支
-          git push -u origin HEAD:blog --force
+          # 推送到 master 分支
+          git push origin master
