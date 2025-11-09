@@ -12,17 +12,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. 下载 Vercel 部署的静态网页
-      - name: Download static website from Vercel
-        run: |
-          mkdir -p vercel-static
-          cd vercel-static
-          # 使用 wget 下载整个网站（递归爬取）
-          wget -r -p -E -k -K https://fapiao-noti-next.vercel.app/ || true
-          cd ..
-          ls -la vercel-static/
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # 2. 配置 SSH 密钥用于推送代码到公司仓库
+      # 2. 设置 Node.js 环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. 构建静态网站
+      - name: Build static website
+        run: npm run export
+
+      # 5. 配置 SSH 密钥用于推送代码到公司仓库
       - name: Setup SSH key
         uses: webfactory/ssh-agent@v0.8.0
         with:
@@ -63,11 +72,11 @@ jobs:
           
           # 新建 blog 目录并复制新文件
           mkdir -p blog
-          cp -r $GITHUB_WORKSPACE/vercel-static/fapiao-noti-next.vercel.app/* blog/
+          cp -r $GITHUB_WORKSPACE/out/* blog/
           
           # 添加文件并提交
           git add .
-          git commit -m "Auto-deploy from Vercel - $(date)" || echo "No changes to commit"
+          git commit -m "Auto-deploy from GitHub Actions - $(date)" || echo "No changes to commit"
           
           # 推送到 master 分支
           git push origin master
