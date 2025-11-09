@@ -1,0 +1,86 @@
+name: Deploy to Company Repository
+
+on:
+  # 当代码推送到main分支时触发
+  push:
+    branches:
+      - main
+  # 允许手动触发工作流
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 获取所有历史记录以支持git push
+
+      # 2. 设置Node.js环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: npm install
+
+      # 4. 构建静态网站
+      - name: Build static files
+        run: |
+          echo "Executing build commands directly with npx..."
+          npx next build
+          npx next-sitemap --config next-sitemap.config.js
+          node scripts/merge-sitemap.js
+        env:
+          # 构建静态导出所需的关键环境变量
+          EXPORT: true
+          # 备用Notion API地址
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          # Notion Page ID - 需要在GitHub仓库secrets中设置
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+          # 其他重要环境变量
+          NEXT_PUBLIC_THEME: ${{ secrets.NEXT_PUBLIC_THEME || 'simpleFeittt' }}
+          NEXT_PUBLIC_LANG: ${{ secrets.NEXT_PUBLIC_LANG || 'zh-CN' }}
+          # 站点URL，用于生成sitemap等绝对路径
+          NEXT_PUBLIC_LINK: 'https://fapiaohezi.com/blog'
+
+      # 5. 配置SSH密钥用于推送代码到公司仓库
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.COMPANY_SSH_KEY }}
+
+      # 6. 配置Git用户信息
+      - name: Setup Git config
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 7. 克隆公司仓库并推送构建结果
+      - name: Clone company repository and push changes
+        run: |
+          # 克隆公司仓库
+          git clone git@codeup.aliyun.com:61b7412cfa282c88e103944f/Web/official-web.git company-repo
+          
+          # 进入公司仓库目录
+          cd company-repo
+          
+          # 创建或切换到blog分支（如果需要）
+          git checkout -B blog
+          
+          # 复制构建的文件到blog目录
+          mkdir -p blog
+          cp -r ../out/* blog/
+          
+          # 添加所有更改
+          git add .
+          
+          # 提交更改
+          git commit -m "Auto-deploy blog from GitHub Actions" || echo "No changes to commit"
+          
+          # 推送到公司仓库
+          git push origin blog --force
