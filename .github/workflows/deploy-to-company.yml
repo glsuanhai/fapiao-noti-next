@@ -34,35 +34,30 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 4. 克隆公司仓库并推送构建结果
-      - name: Clone company repository and push changes
+      # 4. 添加公司仓库主机密钥
+      - name: Add company repository host key
         run: |
-          # 克隆公司仓库
-          git clone git@codeup.aliyun.com:61b7412cfa282c88e103944f/Web/official-web.git company-repo
+          mkdir -p ~/.ssh
+          ssh-keyscan -H codeup.aliyun.com >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      # 5. 直接推送到公司仓库的 blog 目录
+      - name: Push to company repository
+        run: |
+          # 配置临时git仓库
+          mkdir -p /tmp/deploy
+          cd /tmp/deploy
           
-          # 进入公司仓库目录
-          cd company-repo
+          # 初始化git仓库并设置远程
+          git init
+          git remote add origin git@codeup.aliyun.com:61b7412cfa282c88e103944f/Web/official-web.git
           
-          # 创建或切换到 blog 分支
-          git checkout -B blog
-          
-          # 清空 blog 目录并复制新的静态文件
-          rm -rf blog/*
+          # 创建 blog 目录并复制文件
           mkdir -p blog
+          cp -r $GITHUB_WORKSPACE/vercel-static/fapiao-noti-next.vercel.app/* blog/
           
-          # 从下载的 Vercel 网站中提取内容
-          if [ -d "../vercel-static/fapiao-noti-next.vercel.app" ]; then
-            cp -r ../vercel-static/fapiao-noti-next.vercel.app/* blog/
-          else
-            echo "未找到下载的网站文件"
-            exit 1
-          fi
-          
-          # 添加所有更改
+          # 添加文件并提交
           git add .
-          
-          # 提交更改
           git commit -m "Auto-deploy from Vercel - $(date)" || echo "No changes to commit"
           
-          # 推送到公司仓库
-          git push origin blog --force
+          # 推送到 blog 分支
+          git push -u origin HEAD:blog --force
