@@ -4,7 +4,7 @@ const BLOG = {
   // Important page_id！！！Duplicate Template from  https://www.notion.so/tanghh/02ab3b8678004aa69e9e415905ef32a5
   NOTION_PAGE_ID:
     process.env.NOTION_PAGE_ID ||
-    '02ab3b8678004aa69e9e415905ef32a5,en:7c1d570661754c8fbc568e00a01fd70e',
+    '293bd679c79d81008fb6fef86d7c19e5',
   API_BASE_URL: process.env.API_BASE_URL || 'https://www.notion.so/api/v3', // The Notion API base URL, which allows for proxying requests.
   THEME: process.env.NEXT_PUBLIC_THEME || 'simpleFeittt', // 当前主题，在themes文件夹下可找到所有支持的主题；主题名称就是文件夹名，例如 example,fukasawa,gitbook,heo,hexo,landing,matery,medium,next,nobelium,plog,simple
   LANG: process.env.NEXT_PUBLIC_LANG || 'zh-CN', // e.g 'zh-CN','en-US'  see /lib/lang.js for more.
@@ -82,8 +82,8 @@ const BLOG = {
   EDU_HEADER_BACKGROUND_IMG: process.env.NEXT_PUBLIC_EDU_HEADER_BACKGROUND_IMG || 'https://www.notion.so/images/page-cover/nasa_robert_stewart_spacewalk_2.jpg',
   
   // 规范链接配置
-  CANONICAL_DOMAIN: process.env.NEXT_PUBLIC_CANONICAL_DOMAIN || 'https://tianfei.chat', // 规范链接的域名
-  IS_CANONICAL_HOST: process.env.NEXT_PUBLIC_IS_CANONICAL_HOST === 'true', // 是否为规范主机(阿里云)
+  CANONICAL_DOMAIN: process.env.NEXT_PUBLIC_CANONICAL_DOMAIN || 'https://fapiaohezi.com/blog', // 规范链接的域名
+  IS_CANONICAL_HOST: process.env.NEXT_PUBLIC_IS_CANONICAL_HOST === 'true', // 是否为规范主机(公司服务器)
   
   // 外部搜索配置
   ENABLE_EXTERNAL_SEARCH: process.env.NEXT_PUBLIC_ENABLE_EXTERNAL_SEARCH || 'true', // 是否启用外部搜索引擎搜索

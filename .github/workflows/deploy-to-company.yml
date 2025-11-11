@@ -43,6 +43,9 @@ jobs:
           # 主题和语言配置
           NEXT_PUBLIC_THEME: ${{ secrets.NEXT_PUBLIC_THEME || 'simpleFeittt' }}
           NEXT_PUBLIC_LANG: ${{ secrets.NEXT_PUBLIC_LANG || 'zh-CN' }}
+          # 规范链接配置
+          NEXT_PUBLIC_CANONICAL_DOMAIN: 'https://fapiaohezi.com/blog'
+          NEXT_PUBLIC_IS_CANONICAL_HOST: 'true'
 
       # 5. 配置 SSH 密钥用于推送代码到公司仓库
       - name: Setup SSH key
