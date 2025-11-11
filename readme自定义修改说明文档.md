@@ -1,16 +1,36 @@
-# NotionNext项目说明
-本项目目前放在github上，用户名nwgale，项目名：NotionNext
-这套代码同时会产生两个部署
-1）vercel部署(供国外访问)，自动更新，域名blogtianfei.vercel.app/
-2）阿里云部署(供国内访问)，手动更新，域名tianfei.chat，在服务器的目录为 /www/wwwroot/tianfei.chat_static
-
-能实现两边同时部署的方法是通过GitHub Actions工作流。当代码推送到GitHub或手动触发工作流时，系统会自动构建静态网站并部署到阿里云服务器。这样，国内用户可以通过tianfei.chat快速访问网站，避开了国外服务器访问慢的问题
-
 # fapiao-noti-next项目说明
 本项目是基于NotionNext的fork版本，目前部署在GitHub上，用户名glsuanhai，项目名：fapiao-noti-next
 该项目目前部署在Vercel上，部署信息如下：
 - Deployment: fapiao-noti-next-ghwmqhgvw-glsuanhais-projects.vercel.app
 - Domains: fapiao-noti-next.vercel.app
+
+# 同步方式
+我已使用ssh的方式建立了本地与github的远程关系
+
+本地 (Local):
+Bash
+# 你的项目在本地电脑上的文件夹路径
+# 例如：/Users/appletf/claude_workspace/fapiao-noti-next
+远程 (Remote):
+Bash
+# 你的项目在 GitHub 上的 SSH 地址 (使用了我们配置的别名)
+git@github.com-glsuanhai:glsuanhai/fapiao-noti-next.git
+修改后同步的方法 (黄金三步)： 当你修改完文件后，在你的项目文件夹 (fapiao-noti-next) 里依次执行：
+
+Bash
+
+# 1. 添加所有更改
+git add .
+
+# 2. 提交更改 (本地保存)，"..."里写你自己的修改备注
+git commit -m "我这次修改的说明"
+
+# 3. 推送到 GitHub
+git push
+
+——————————
+
+
 
 # NotionNext 自定义修改说明文档
 

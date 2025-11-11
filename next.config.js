@@ -81,6 +81,7 @@ function scanSubdirectories(directory) {
  */
 
 const nextConfig = {
+  basePath: '/blog',
   eslint: {
     ignoreDuringBuilds: true
   },
