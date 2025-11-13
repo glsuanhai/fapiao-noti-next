@@ -884,12 +884,36 @@ outputFileTracingExcludes: {
 - **内容完整无误**: 最终的 Sitemap 包含所有内外路径，且无重复、无格式错误。
 - **流程健壮**: 整套机制不依赖 `next-sitemap` 的有缺陷功能，稳定可靠。
 
+### 13. 百度统计追踪代码集成
+
+在 `pages/_document.js` 的 `<Head>` 标签中添加百度统计脚本，确保所有页面都能被追踪。
+
+**修改位置**：`pages/_document.js` 第 65 行（深色模式脚本后）
+
+**添加内容**：
+```javascript
+{/* 百度统计追踪代码 */}
+<script
+  dangerouslySetInnerHTML={{
+    __html: `
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?1ccb1a09807fe753ed38ab1f8c63d72f";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+    `
+  }}
+/>
+```
+
 ---
 
 ## 📝 版本记录
 
 - **创建日期**: 2025年1月4日
-- **更新日期**: 2025年10月11日
+- **更新日期**: 2025年11月13日
 - **NotionNext版本**: 基于当前版本的自定义修改
 - **主要功能**: 
   - 教育版页面、页脚链接配置、样式优化
@@ -902,6 +926,7 @@ outputFileTracingExcludes: {
   - 构建时 API 请求优化（解决429错误）（2025年10月10日新增）
   - Vercel 部署优化（通过`outputFileTracingExcludes`解决体积超限）（2025年10月11日更新）
   - Sitemap 生成机制优化（解决时间戳、重复路径等问题）（2025年10月11日新增）
+  - 百度统计追踪代码集成（在 `_document.js` 中注入）（2025年11月13日新增）
 
 ---
 

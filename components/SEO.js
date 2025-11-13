@@ -98,7 +98,7 @@ const SEO = props => {
   const FACEBOOK_PAGE = siteConfig('FACEBOOK_PAGE', null, NOTION_CONFIG)
 
   const AUTHOR = siteConfig('AUTHOR')
-  
+
   // 获取规范链接配置
   const CANONICAL_DOMAIN = siteConfig('CANONICAL_DOMAIN')
   // 处理当前路径，移除查询参数
@@ -106,8 +106,10 @@ const SEO = props => {
   if (canonicalPath.includes('?')) {
     canonicalPath = canonicalPath.split('?')[0]
   }
-  // 构建完整的规范URL
-  const canonicalUrl = `${CANONICAL_DOMAIN}${canonicalPath}`
+  // 构建完整的规范URL（修复双斜杠问题）
+  const canonicalUrl = `${CANONICAL_DOMAIN}${canonicalPath}`.replace(/\/\/$/, '/')
+  // og:url 也使用规范化后的URL
+  const ogUrl = canonicalUrl
   return (
     <Head>
       <link rel='icon' href={favicon} />
@@ -118,6 +120,10 @@ const SEO = props => {
         content='width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0'
       />
       <meta name='robots' content='follow, index' />
+      <meta name='language' content='Chinese' />
+      <meta name='author' content={AUTHOR || siteInfo?.author || '\u53d1\u7968\u76d2\u5b50'} />
+      <meta name='copyright' content={'\u00a9 2025 ' + (siteInfo?.title || '\u53d1\u7968\u76d2\u5b50')} />
+      <meta name='revisit-after' content='7 days' />
       <meta charSet='UTF-8' />
       {SEO_GOOGLE_SITE_VERIFICATION && (
         <meta
@@ -133,10 +139,10 @@ const SEO = props => {
       )}
       <meta name='keywords' content={keywords} />
       <meta name='description' content={description} />
-      <meta property='og:locale' content={lang} />
+      <meta property='og:locale' content='zh_CN' />
       <meta property='og:title' content={title} />
       <meta property='og:description' content={description} />
-      <meta property='og:url' content={url} />
+      <meta property='og:url' content={ogUrl} />
       <meta property='og:image' content={image} />
       <meta property='og:site_name' content={title} />
       <meta property='og:type' content={type} />
@@ -146,6 +152,59 @@ const SEO = props => {
       
       {/* 添加规范链接 */}
       <link rel='canonical' href={canonicalUrl} />
+
+      {/* JSON-LD 结构化数据 */}
+      <script
+        type='application/ld+json'
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: siteInfo?.title || '\u53d1票\u76d2\u5b50',
+            description: siteInfo?.description || '\u81ea\u52a8\u6536\u96c6\u6574\u7406\u53d1\u7968\uff0c\u4e00\u952e\u5b9e\u73b0\u62a5\u9500\u586b\u5355',
+            url: canonicalUrl,
+            logo: image,
+            sameAs: [
+              'https://www.fapiaohezi.com'
+            ],
+            address: {
+              '@type': 'PostalAddress',
+              addressCountry: 'CN',
+              addressLocality: '\u4e2d\u56fd'
+            }
+          })
+        }}
+      />
+
+      {/* Blog Schema */}
+      {meta?.type === 'Post' && post && (
+        <script
+          type='application/ld+json'
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BlogPosting',
+              headline: post?.title,
+              description: post?.summary,
+              image: post?.pageCoverThumbnail || image,
+              datePublished: post?.date,
+              dateModified: post?.lastBlot || post?.date,
+              author: {
+                '@type': 'Person',
+                name: siteInfo?.author || AUTHOR || '\u53d1\u7968\u76d2\u5b50'
+              },
+              publisher: {
+                '@type': 'Organization',
+                name: siteInfo?.title || '\u53d1\u7968\u76d2\u5b50',
+                logo: {
+                  '@type': 'ImageObject',
+                  url: image
+                }
+              }
+            })
+          }}
+        />
+      )}
 
       <link rel='icon' href={BLOG_FAVICON} />
 
