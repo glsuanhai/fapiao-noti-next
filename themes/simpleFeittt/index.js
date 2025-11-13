@@ -10,6 +10,7 @@ import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
 import { createContext, useContext, useEffect, useRef } from 'react'
 import BlogPostBar from './components/BlogPostBar'
+import BaiduAnalytics from './components/BaiduAnalytics'
 import CONFIG from './config'
 import { Style } from './style'
 
@@ -83,6 +84,7 @@ const LayoutBase = props => {
 
   return (
     <ThemeGlobalSimple.Provider value={{ searchModal }}>
+      <BaiduAnalytics />
       <div
         id='theme-simple'
         className={`${siteConfig('FONT_STYLE')} min-h-screen flex flex-col dark:text-gray-300  bg-white dark:bg-black scroll-smooth`}>
