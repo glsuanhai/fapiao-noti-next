@@ -81,7 +81,8 @@ function scanSubdirectories(directory) {
  */
 
 const nextConfig = {
-  basePath: '/blog',
+  // 仅在公司部署时使用 basePath，Vercel 部署不需要
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   eslint: {
     ignoreDuringBuilds: true
   },
