@@ -1,7 +1,7 @@
 import Script from 'next/script'
 
 /**
- * 百度统计追踪组件
+ * 百度统计追踪组件测试
  * 使用 Next.js Script 组件确保在静态导出时也能正确注入
  */
 export default function BaiduAnalytics() {
