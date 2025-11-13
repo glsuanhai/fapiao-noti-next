@@ -63,6 +63,21 @@ class MyDocument extends Document {
 
           {/* 预先设置深色模式，避免闪烁 */}
           <script dangerouslySetInnerHTML={{ __html: darkModeScript }} />
+
+          {/* 百度统计追踪代码 */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                var _hmt = _hmt || [];
+                (function() {
+                  var hm = document.createElement("script");
+                  hm.src = "https://hm.baidu.com/hm.js?1ccb1a09807fe753ed38ab1f8c63d72f";
+                  var s = document.getElementsByTagName("script")[0]; 
+                  s.parentNode.insertBefore(hm, s);
+                })();
+              `
+            }}
+          />
         </Head>
 
         <body>
